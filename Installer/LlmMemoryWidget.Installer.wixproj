@@ -1,0 +1,13 @@
+<Project Sdk="WixToolset.Sdk/5.0.2">
+
+  <PropertyGroup>
+    <OutputType>Package</OutputType>
+    <OutputName>LLM-Memory-Widget-Setup</OutputName>
+    <InstallerPlatform>x64</InstallerPlatform>
+    <Platform>x64</Platform>
+    <PublishDir Condition="'$(PublishDir)' == ''">$(MSBuildThisFileDirectory)..\publish\win-x64</PublishDir>
+    <AppIconPath>$(MSBuildThisFileDirectory)..\Assets\AppIcon.ico</AppIconPath>
+    <DefineConstants>PublishDir=$(PublishDir);AppIconPath=$(AppIconPath)</DefineConstants>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,60 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package
+    Name="LLM Memory Widget"
+    Manufacturer="LLM Memory Widget"
+    Version="1.0.0.0"
+    UpgradeCode="8C2F9645-2D22-48FD-A25E-8599C5DE8C66"
+    Scope="perMachine">
+
+    <SummaryInformation
+      Description="LLM Memory Widget Installer"
+      Manufacturer="LLM Memory Widget" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of LLM Memory Widget is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <Icon Id="AppIcon.ico" SourceFile="$(var.AppIconPath)" />
+    <Property Id="ARPPRODUCTICON" Value="AppIcon.ico" />
+
+    <Feature Id="MainFeature" Title="LLM Memory Widget" Level="1">
+      <ComponentRef Id="MainExecutable" />
+    </Feature>
+
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="LLM Memory Widget" />
+    </StandardDirectory>
+
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="ApplicationProgramsFolder" Name="LLM Memory Widget" />
+    </StandardDirectory>
+
+    <StandardDirectory Id="DesktopFolder" />
+
+    <DirectoryRef Id="INSTALLFOLDER">
+      <Component Id="MainExecutable" Guid="D9D7C9B4-24BA-40F4-8F6B-34BB23587E7F" Bitness="always64">
+        <File
+          Id="LlmMemoryWidgetExe"
+          Source="$(var.PublishDir)\LlmMemoryWidget.exe"
+          KeyPath="yes">
+          <Shortcut
+            Id="StartMenuShortcut"
+            Directory="ApplicationProgramsFolder"
+            Name="LLM Memory Widget"
+            Description="Monitor local LLM VRAM, RAM, and compute usage"
+            WorkingDirectory="INSTALLFOLDER"
+            Icon="AppIcon.ico"
+            Advertise="true" />
+          <Shortcut
+            Id="DesktopShortcut"
+            Directory="DesktopFolder"
+            Name="LLM Memory Widget"
+            Description="Monitor local LLM VRAM, RAM, and compute usage"
+            WorkingDirectory="INSTALLFOLDER"
+            Icon="AppIcon.ico"
+            Advertise="true" />
+        </File>
+        <RemoveFolder Id="RemoveApplicationProgramsFolder" Directory="ApplicationProgramsFolder" On="uninstall" />
+      </Component>
+    </DirectoryRef>
+  </Package>
+</Wix>

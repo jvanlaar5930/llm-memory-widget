@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36623.8 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LlmMemoryWidget", "LlmMemoryWidget.csproj", "{760A8F7D-BA32-C7CC-7203-B0F337F87047}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{760A8F7D-BA32-C7CC-7203-B0F337F87047}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{760A8F7D-BA32-C7CC-7203-B0F337F87047}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{760A8F7D-BA32-C7CC-7203-B0F337F87047}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{760A8F7D-BA32-C7CC-7203-B0F337F87047}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1EA497E8-7D6A-47F0-B098-3053CA4BD66D}
+	EndGlobalSection
+EndGlobal

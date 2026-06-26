@@ -1,0 +1,292 @@
+<Window x:Class="LlmMemoryWidget.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="LLM Memory Widget"
+        Icon="Assets/AppIcon.ico"
+        Width="560"
+        Height="740"
+        MinWidth="520"
+        MinHeight="640"
+        WindowStyle="SingleBorderWindow"
+        ResizeMode="CanResizeWithGrip"
+        Topmost="True"
+        Background="#10131f"
+        AllowsTransparency="False">
+
+    <Border BorderBrush="#3f6f91" BorderThickness="2" Padding="10" Background="#141827">
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled"
+                      CanContentScroll="False">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Margin="0,0,0,10">
+                <TextBlock Text="LLM VRAM / RAM"
+                           Foreground="#dbe7ff"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Margin="0,0,0,2"/>
+
+                <Grid Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="115"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="115"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Mode" Foreground="#aeb8d4"/>
+                    <ComboBox x:Name="ModeCombo"
+                              Grid.Column="1"
+                              SelectedIndex="0"
+                              SelectionChanged="SettingsChanged">
+                        <ComboBoxItem Content="LM Studio"/>
+                        <ComboBoxItem Content="llama.cpp"/>
+                    </ComboBox>
+
+                    <TextBlock Grid.Column="2" Text="Process" Foreground="#aeb8d4" Margin="14,0,0,0"/>
+                    <TextBox x:Name="ProcessNameBox"
+                             Grid.Column="3"
+                             Text="LM Studio"
+                             TextChanged="SettingsChanged"/>
+                </Grid>
+
+                <Grid Margin="0,8,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="115"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="115"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Endpoint" Foreground="#aeb8d4"/>
+                    <TextBox x:Name="EndpointBox"
+                             Grid.Column="1"
+                             Text="http://127.0.0.1:8080/metrics"
+                             TextChanged="SettingsChanged"/>
+
+                    <TextBlock Grid.Column="2" Text="Total VRAM GB" Foreground="#aeb8d4" Margin="14,0,0,0"/>
+                    <TextBox x:Name="TotalGbBox"
+                             Grid.Column="3"
+                             Text="12"
+                             TextChanged="SettingsChanged"/>
+                </Grid>
+            </StackPanel>
+
+            <Grid x:Name="ColumnsRoot" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition x:Name="GpuColumnDefinition" Width="*"/>
+                    <ColumnDefinition x:Name="LeftSpacerColumnDefinition" Width="12"/>
+                    <ColumnDefinition x:Name="RamColumnDefinition" Width="*"/>
+                    <ColumnDefinition x:Name="RightSpacerColumnDefinition" Width="12"/>
+                    <ColumnDefinition x:Name="ComputeColumnDefinition" Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border x:Name="GpuColumnBorder"
+                        Grid.Column="0"
+                        MouseLeftButtonDown="ColumnDoubleClicked"
+                        BorderBrush="#4d86a5"
+                        BorderThickness="2"
+                        CornerRadius="4"
+                        Background="#0c1020"
+                        Padding="6">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="GPU VRAM"
+                                   Foreground="#dbe7ff"
+                                   FontSize="14"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,8"/>
+
+                        <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition x:Name="GpuFreeRow" Height="1*" MinHeight="34"/>
+                                <RowDefinition x:Name="GpuModelRow" Height="1*" MinHeight="34"/>
+                                <RowDefinition x:Name="GpuKvRow" Height="1*" MinHeight="34"/>
+                                <RowDefinition x:Name="GpuComputeRow" Height="1*" MinHeight="34"/>
+                                <RowDefinition x:Name="GpuOtherRow" Height="1*" MinHeight="34"/>
+                            </Grid.RowDefinitions>
+
+                            <Border Grid.Row="0" Background="#1c1d2b"/>
+                            <Border Grid.Row="1" Background="#3b98cf"/>
+                            <Border Grid.Row="2" Background="#c3a000"/>
+                            <Border Grid.Row="3" Background="#9b85c9"/>
+                            <Border Grid.Row="4" Background="#464a57"/>
+
+                            <Grid Grid.Row="0" Margin="6">
+                                <TextBlock Text="FREE" Foreground="#cfd8ea" FontWeight="SemiBold" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                                <TextBlock x:Name="GpuFreeText" Text="0.0 GB" Foreground="#ffffff" HorizontalAlignment="Right" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                            </Grid>
+
+                            <Grid Grid.Row="1" Margin="6">
+                                <TextBlock Text="MODEL" Foreground="#e8f3ff" FontWeight="SemiBold" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                                <TextBlock x:Name="GpuModelText" Text="0.0 GB" Foreground="#ffffff" HorizontalAlignment="Right" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                            </Grid>
+
+                            <Grid Grid.Row="2" Margin="6">
+                                <TextBlock Text="KV CACHE" Foreground="#fff7c9" FontWeight="SemiBold" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                                <TextBlock x:Name="GpuKvText" Text="0.0 GB" Foreground="#ffffff" HorizontalAlignment="Right" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                            </Grid>
+
+                            <Grid Grid.Row="3" Margin="6">
+                                <TextBlock Text="COMPUTE" Foreground="#f0ebff" FontWeight="SemiBold" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                                <TextBlock x:Name="GpuComputeText" Text="0.0 GB" Foreground="#ffffff" HorizontalAlignment="Right" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                            </Grid>
+
+                            <Grid Grid.Row="4" Margin="6">
+                                <TextBlock Text="OTHER" Foreground="#d7d7d7" FontWeight="SemiBold" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                                <TextBlock x:Name="GpuOtherText" Text="0.0 GB" Foreground="#ffffff" HorizontalAlignment="Right" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                            </Grid>
+                        </Grid>
+
+                        <TextBlock x:Name="GpuTotalText"
+                                   Grid.Row="2"
+                                   Text="0.0 / 0.0 GB"
+                                   Foreground="#dfe8ff"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,8,0,0"/>
+                    </Grid>
+                </Border>
+
+                <Border x:Name="RamColumnBorder"
+                        Grid.Column="2"
+                        MouseLeftButtonDown="ColumnDoubleClicked"
+                        BorderBrush="#4d86a5"
+                        BorderThickness="2"
+                        CornerRadius="4"
+                        Background="#0c1020"
+                        Padding="6">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="SYSTEM RAM"
+                                   Foreground="#dbe7ff"
+                                   FontSize="14"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,8"/>
+
+                        <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition x:Name="RamFreeRow" Height="1*" MinHeight="34"/>
+                                <RowDefinition x:Name="RamUsedRow" Height="1*" MinHeight="34"/>
+                            </Grid.RowDefinitions>
+
+                            <Border Grid.Row="0" Background="#1c1d2b"/>
+                            <Border Grid.Row="1" Background="#c3a000"/>
+
+                            <Grid Grid.Row="0" Margin="6">
+                                <TextBlock Text="FREE" Foreground="#cfd8ea" FontWeight="SemiBold" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                                <TextBlock x:Name="RamFreeText" Text="0.0 GB" Foreground="#ffffff" HorizontalAlignment="Right" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                            </Grid>
+
+                            <Grid Grid.Row="1" Margin="6">
+                                <TextBlock Text="PROCESS" Foreground="#fff7c9" FontWeight="SemiBold" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                                <TextBlock x:Name="RamUsedText" Text="0.0 GB" Foreground="#ffffff" HorizontalAlignment="Right" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                            </Grid>
+                        </Grid>
+
+                        <TextBlock x:Name="RamTotalText"
+                                   Grid.Row="2"
+                                   Text="RAM: 0.0 GB"
+                                   Foreground="#dfe8ff"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,8,0,0"/>
+                    </Grid>
+                </Border>
+
+                <Border x:Name="ComputeColumnBorder"
+                        Grid.Column="4"
+                        MouseLeftButtonDown="ColumnDoubleClicked"
+                        BorderBrush="#4d86a5"
+                        BorderThickness="2"
+                        CornerRadius="4"
+                        Background="#0c1020"
+                        Padding="6">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="COMPUTE"
+                                   Foreground="#dbe7ff"
+                                   FontSize="14"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,8"/>
+
+                        <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition x:Name="ComputeIdleRow" Height="1*" MinHeight="34"/>
+                                <RowDefinition x:Name="GpuUtilRow" Height="1*" MinHeight="34"/>
+                                <RowDefinition x:Name="CpuUtilRow" Height="1*" MinHeight="34"/>
+                            </Grid.RowDefinitions>
+
+                            <Border Grid.Row="0" Background="#1c1d2b"/>
+                            <Border Grid.Row="1" Background="#9b85c9"/>
+                            <Border Grid.Row="2" Background="#464a57"/>
+
+                            <Grid Grid.Row="0" Margin="6">
+                                <TextBlock Text="IDLE" Foreground="#cfd8ea" FontWeight="SemiBold" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                                <TextBlock x:Name="ComputeIdleText" Text="100%" Foreground="#ffffff" HorizontalAlignment="Right" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                            </Grid>
+
+                            <Grid Grid.Row="1" Margin="6">
+                                <TextBlock Text="GPU" Foreground="#f0ebff" FontWeight="SemiBold" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                                <TextBlock x:Name="GpuUtilText" Text="0%" Foreground="#ffffff" HorizontalAlignment="Right" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                            </Grid>
+
+                            <Grid Grid.Row="2" Margin="6">
+                                <TextBlock Text="CPU" Foreground="#d7d7d7" FontWeight="SemiBold" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                                <TextBlock x:Name="CpuUtilText" Text="0%" Foreground="#ffffff" HorizontalAlignment="Right" FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                            </Grid>
+                        </Grid>
+
+                        <TextBlock x:Name="ComputeTotalText"
+                                   Grid.Row="2"
+                                   Text="GPU 0% / CPU 0%"
+                                   Foreground="#dfe8ff"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,8,0,0"/>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <StackPanel Grid.Row="2" Margin="0,12,0,0">
+                <TextBlock x:Name="MetricsSourceText"
+                           Text="metrics: process counters"
+                           Foreground="#dfe8ff"
+                           FontSize="12"
+                           FontWeight="SemiBold"
+                           HorizontalAlignment="Center"/>
+
+                <TextBlock x:Name="StatusText"
+                           Text="starting..."
+                           Foreground="#8fa0c4"
+                           FontSize="12"
+                           HorizontalAlignment="Center"
+                           Margin="0,4,0,0"/>
+            </StackPanel>
+        </Grid>
+        </ScrollViewer>
+    </Border>
+</Window>
