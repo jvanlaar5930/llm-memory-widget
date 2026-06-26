@@ -1,30 +1,52 @@
-# LLM Memory Widget
+<p align="center">
+  <img src="./public/llm-memory-widget.gif" alt="LLM Memory Widget demo" width="850" />
+</p>
 
-A small Windows desktop widget for monitoring local LLM resource usage while running models through **LM Studio** or **llama.cpp**.
+<h1 align="center">LLM Memory Widget</h1>
 
-The app is designed to give a cleaner view than Task Manager when tuning local models. It shows GPU VRAM, system RAM, and compute activity in a compact always-on-top WPF window.
+<p align="center">
+  A sleek Windows desktop widget for monitoring local LLM GPU VRAM, system RAM, and compute usage in realtime.
+</p>
+
+<p align="center">
+  <img alt=".NET 8" src="https://img.shields.io/badge/.NET-8.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" />
+  <img alt="C#" src="https://img.shields.io/badge/C%23-Desktop-239120?style=for-the-badge&logo=csharp&logoColor=white" />
+  <img alt="WPF" src="https://img.shields.io/badge/WPF-Windows-0078D4?style=for-the-badge&logo=windows&logoColor=white" />
+  <img alt="llama.cpp" src="https://img.shields.io/badge/llama.cpp-Metrics-111827?style=for-the-badge" />
+  <img alt="LM Studio" src="https://img.shields.io/badge/LM%20Studio-Compatible-0F172A?style=for-the-badge" />
+  <img alt="WiX MSI" src="https://img.shields.io/badge/WiX-MSI%20Installer-F97316?style=for-the-badge" />
+</p>
+
+---
+
+## Summary
+
+**LLM Memory Widget** is a compact, always-on-top Windows monitoring tool built for tuning local LLM runtimes like **LM Studio** and **llama.cpp**. It gives a cleaner, model-focused view than Task Manager by separating local model usage into dedicated columns for **GPU VRAM**, **System RAM**, and **Compute**.
+
+The widget tracks realtime process-level GPU and CPU activity, reads dedicated GPU memory from Windows performance counters, and can optionally parse llama.cpp `/metrics` output for model, KV cache, compute, and other runtime memory details. It also supports a focused column mode, custom app icon, and MSI installer packaging for easy local installation.
 
 ## Features
 
-- Realtime 1-second refresh
-- LM Studio and llama.cpp modes
-- Automatic process defaults when switching modes
-- Dedicated GPU memory per process
-- System RAM usage estimate
-- GPU and CPU utilization
-- llama.cpp `/metrics` support
-- Attempts to parse model, KV cache, compute, and other VRAM metrics when exposed
-- Three-column layout:
-  - GPU VRAM
-  - System RAM
-  - Compute
-- Double-click any column to focus it as the only visible column
-- Double-click again to return to the three-column view
-- Normal Windows title bar
-- Custom application icon
-- MSI installer support through WiX
+* Realtime 1-second refresh
+* LM Studio and llama.cpp modes
+* Automatic process defaults when switching modes
+* Dedicated GPU memory per process
+* System RAM usage estimate
+* GPU and CPU utilization
+* llama.cpp `/metrics` support
+* Attempts to parse model, KV cache, compute, and other VRAM metrics when exposed
+* Three-column layout:
 
-## Screens / Layout
+  * GPU VRAM
+  * System RAM
+  * Compute
+* Double-click any column to focus it as the only visible column
+* Double-click again to return to the three-column view
+* Normal Windows title bar
+* Custom application icon
+* MSI installer support through WiX
+
+## Layout
 
 The main widget is split into three columns.
 
@@ -32,11 +54,11 @@ The main widget is split into three columns.
 
 Shows the selected process's dedicated GPU memory split into:
 
-- Model
-- KV Cache
-- Compute
-- Other
-- Free
+* Model
+* KV Cache
+* Compute
+* Other
+* Free
 
 When exact values are not available from an endpoint, the widget falls back to Windows GPU process counters and estimates the split.
 
@@ -56,23 +78,23 @@ This is not a perfect accounting model because Windows working set and GPU memor
 
 Shows realtime activity:
 
-- GPU utilization for the selected process
-- CPU utilization for the selected process
-- Idle percentage
+* GPU utilization for the selected process
+* CPU utilization for the selected process
+* Idle percentage
 
 Dedicated VRAM can remain fairly static while inference is active because memory is usually allocated when the model loads. The compute column is usually the better indicator of active prompt ingestion or token generation.
 
 ## Requirements
 
-- Windows 10/11
-- .NET 8 SDK for development/building
-- Windows GPU performance counters enabled
-- Optional: llama.cpp started with `--metrics`
+* Windows 10/11
+* .NET 8 SDK for development/building
+* Windows GPU performance counters enabled
+* Optional: llama.cpp started with `--metrics`
 
 For MSI generation:
 
-- WiX Toolset SDK package is referenced by the installer project
-- Internet access may be needed the first time NuGet restores WiX packages
+* WiX Toolset SDK package is referenced by the installer project
+* Internet access may be needed the first time NuGet restores WiX packages
 
 ## Quick Start
 
@@ -213,13 +235,13 @@ The project intentionally avoids `Microsoft.VisualBasic.Devices.ComputerInfo` an
 
 When a `/metrics` endpoint is configured, the widget attempts to parse Prometheus-style metrics for:
 
-- model VRAM
-- KV cache VRAM
-- compute/workspace VRAM
-- other/scratch/buffer VRAM
-- RAM/host memory
-- KV cache used cells
-- KV cache total cells
+* model VRAM
+* KV cache VRAM
+* compute/workspace VRAM
+* other/scratch/buffer VRAM
+* RAM/host memory
+* KV cache used cells
+* KV cache total cells
 
 Exact metric names can vary between llama.cpp builds, so the parser searches for likely memory-related metric names instead of depending on only one exact name.
 
@@ -229,13 +251,13 @@ LM Studio does not consistently expose a detailed model/KV/compute VRAM breakdow
 
 For LM Studio, the widget primarily uses Windows process counters unless you provide an endpoint that exposes JSON or Prometheus-style metrics. If an endpoint is supplied, the parser scans for numeric fields related to:
 
-- model
-- KV cache
-- compute
-- VRAM
-- GPU memory
-- RAM
-- host memory
+* model
+* KV cache
+* compute
+* VRAM
+* GPU memory
+* RAM
+* host memory
 
 ## Fallback Estimates
 
@@ -334,8 +356,8 @@ C:\Program Files\LLM Memory Widget
 
 It also creates:
 
-- Start Menu shortcut
-- Desktop shortcut
+* Start Menu shortcut
+* Desktop shortcut
 
 ## Project Structure
 
@@ -392,9 +414,9 @@ The app guards mode-switching logic until the WPF window is loaded. If you modif
 
 That is expected in many cases. Local LLM runtimes often allocate VRAM when the model loads. During active generation, watch:
 
-- GPU utilization
-- CPU utilization
-- llama.cpp prompt/generation metrics if available
+* GPU utilization
+* CPU utilization
+* llama.cpp prompt/generation metrics if available
 
 ### Dedicated GPU memory is unavailable
 
