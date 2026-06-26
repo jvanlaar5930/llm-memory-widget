@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./public/llm-memory-widget.gif" alt="LLM Memory Widget demo" width="850" />
+  <img src="./public/llm-memory-widget.gif" alt="LLM Memory Widget demo" width="350" />
 </p>
 
 <h1 align="center">LLM Memory Widget</h1>
